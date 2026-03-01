@@ -36,6 +36,9 @@ ohlcv = "ohlcv_hub.cli:main"
 [project.urls]
 Repository = "https://github.com/FaustoS88/ohlcv-hub"
 
+[tool.setuptools.package-data]
+"ohlcv_hub" = ["py.typed"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
