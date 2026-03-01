@@ -9,10 +9,13 @@ Asset class detection (rough rules, refined per provider):
 
 from __future__ import annotations
 
+import logging
 import re
 
 from ohlcv_hub.models import Candle
 from ohlcv_hub.providers.base import OHLCVProvider
+
+logger = logging.getLogger(__name__)
 
 # Lazy imports — providers are only loaded when first used
 _binance: OHLCVProvider | None = None
@@ -102,10 +105,36 @@ async def fetch(
         interval: Bar interval — ``1m``, ``5m``, ``15m``, ``1h``, ``4h``, ``1d``, ``1w``.
         limit:    Number of bars to return (most recent, oldest-first).
     """
-    for provider in pick(symbol):
+    chain = pick(symbol)
+    tried: list[str] = []
+
+    for provider in chain:
         if not provider.supports(symbol):
+            logger.debug("provider %s skipped — does not support %s", provider.name, symbol)
             continue
+
+        logger.debug("trying provider %s for %s %s", provider.name, symbol, interval)
         result = await provider.fetch(symbol, interval, limit)
+
         if result:
+            logger.debug(
+                "provider %s returned %d candles for %s %s",
+                provider.name,
+                len(result),
+                symbol,
+                interval,
+            )
             return result
+
+        tried.append(provider.name)
+        logger.warning(
+            "provider %s returned no data for %s %s", provider.name, symbol, interval
+        )
+
+    logger.error(
+        "all providers failed for %s %s — tried: %s",
+        symbol,
+        interval,
+        tried or ["none"],
+    )
     return None
