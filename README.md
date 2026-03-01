@@ -60,19 +60,22 @@ asyncio.run(main())
 
 ## Provider Routing
 
-| Asset class | Pattern example | Provider chain |
-|-------------|-----------------|----------------|
-| Crypto      | `BTCUSDT`       | Binance → yfinance |
-| US stocks   | `AAPL`, `^GSPC` | yfinance |
-| Intl stocks | `WM.TO`, `RIO.L`| yfinance |
-| Forex       | `EURUSD`        | yfinance |
+| Asset class | Pattern example  | Provider chain                              |
+|-------------|------------------|---------------------------------------------|
+| Crypto      | `BTCUSDT`        | Binance → yfinance                          |
+| US stocks   | `AAPL`, `^GSPC`  | yfinance → Tiingo (daily/weekly) → Finnhub  |
+| Intl stocks | `WM.TO`, `RIO.L` | yfinance → Finnhub                          |
+| Forex       | `EURUSD`         | yfinance → Finnhub                          |
+
+Tiingo requires `TIINGO_API_KEY`. Finnhub requires `FINNHUB_API_KEY`. Both fall back gracefully when the key is absent.
 
 ## Roadmap
 
-- [ ] Tiingo provider (free tier, great for international stocks)
-- [ ] Finnhub provider (forex via Oanda feed)
-- [ ] Response caching (TTL-based)
+- [x] Tiingo provider (daily/weekly, stocks and ETFs)
+- [x] Finnhub provider (stock candles + forex via Oanda feed)
+- [ ] Session reuse in BinanceProvider
 - [ ] CLI tool: `ohlcv fetch BTCUSDT 1d 100`
+- [ ] Response caching (TTL-based)
 - [ ] pip release
 
 ## License
