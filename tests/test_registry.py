@@ -5,8 +5,6 @@ from __future__ import annotations
 import pytest
 
 from ohlcv_hub.providers.binance import BinanceProvider
-from ohlcv_hub.providers.finnhub import FinnhubProvider
-from ohlcv_hub.providers.tiingo import TiingoProvider
 from ohlcv_hub.providers.yfinance import YFinanceProvider
 from ohlcv_hub.registry import pick
 
