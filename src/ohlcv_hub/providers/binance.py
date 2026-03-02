@@ -19,6 +19,16 @@ _VALID_INTERVALS = frozenset(
 # Crypto quote currencies handled by this provider
 _CRYPTO_RE = re.compile(r"^[A-Z]{2,}(USDT|USDC|BTC|ETH|BNB|BUSD|FDUSD)$")
 
+# Module-level session — created once, reused across all requests
+_session: aiohttp.ClientSession | None = None
+
+
+async def _get_session() -> aiohttp.ClientSession:
+    global _session
+    if _session is None or _session.closed:
+        _session = aiohttp.ClientSession()
+    return _session
+
 
 def _normalise(symbol: str) -> str:
     """Return a Binance-compatible symbol string.
@@ -58,11 +68,11 @@ class BinanceProvider(OHLCVProvider):
             "limit": min(limit, 1000),
         }
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(_KLINES_URL, params=params) as resp:
-                if resp.status != 200:
-                    return None
-                data = await resp.json(content_type=None)
+        session = await _get_session()
+        async with session.get(_KLINES_URL, params=params) as resp:
+            if resp.status != 200:
+                return None
+            data = await resp.json(content_type=None)
 
         if not data:
             return None
