@@ -1,21 +1,27 @@
 # ohlcv-hub
 
-Async Python library for fetching OHLCV (candlestick) market data from multiple free providers. Automatically routes symbols to the best available data source.
+[![CI](https://github.com/FaustoS88/ohlcv-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/FaustoS88/ohlcv-hub/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+Async Python library for fetching OHLCV (candlestick) market data from multiple free providers. Automatically routes symbols to the best available data source and falls back gracefully when a provider fails.
 
 ```
 BTCUSDT  →  Binance  →  yfinance (fallback)
-AAPL     →  yfinance
-WM.TO    →  yfinance  (exchange-suffix support)
-EURUSD   →  yfinance  (forex)
+AAPL     →  yfinance  →  Tiingo (daily/weekly)  →  Finnhub
+WM.TO    →  yfinance  →  Finnhub
+EURUSD   →  yfinance  →  Finnhub
 ```
 
 ## Features
 
-- **Multi-provider** — Binance, yfinance, Tiingo, Finnhub (more coming)
-- **Auto-routing** — asset class detection picks the right provider chain automatically
+- **Multi-provider** — Binance, yfinance, Tiingo, Finnhub with automatic fallback
+- **Auto-routing** — asset class detection picks the right provider chain per symbol
 - **Async** — built on `asyncio` / `aiohttp`, no blocking calls
-- **Typed** — `Candle` dataclass with slots, fully annotated
+- **Typed** — full type annotations, `py.typed` marker included
+- **CLI** — `ohlcv fetch BTCUSDT 1d 30` out of the box
 - **Intervals** — `1m`, `5m`, `15m`, `1h`, `4h`, `1d`, `1w`
+- **Resilient** — structured logging on every provider attempt and failure
 
 ## Installation
 
@@ -28,7 +34,7 @@ Or from source:
 ```bash
 git clone https://github.com/FaustoS88/ohlcv-hub.git
 cd ohlcv-hub
-pip install -e ".[dev]"
+pip install -e ".[dev,cli]"
 ```
 
 ## Quick Start
@@ -39,11 +45,27 @@ from ohlcv_hub import fetch
 
 async def main():
     # Crypto — routes to Binance automatically
-    candles = await fetch("BTCUSDT", interval="1d", limit=30)
+    candles = await fetch("BTCUSDT", interval="1d", limit=10)
     for c in candles[-3:]:
         print(f"{c.time}  O:{c.open:.2f}  H:{c.high:.2f}  L:{c.low:.2f}  C:{c.close:.2f}")
 
 asyncio.run(main())
+```
+
+## CLI
+
+```bash
+# Basic fetch (auto-routes to best provider)
+ohlcv fetch BTCUSDT
+
+# Custom interval and limit
+ohlcv fetch AAPL 1d 30
+
+# Force a specific provider
+ohlcv fetch EURUSD 1d 20 --provider yfinance
+
+# Output as CSV
+ohlcv fetch BTCUSDT 1d 10 --csv
 ```
 
 ## Supported Intervals
@@ -69,12 +91,19 @@ asyncio.run(main())
 
 Tiingo requires `TIINGO_API_KEY`. Finnhub requires `FINNHUB_API_KEY`. Both fall back gracefully when the key is absent.
 
+## Examples
+
+See [`examples/`](examples/) for runnable scripts:
+
+- [`basic_fetch.py`](examples/basic_fetch.py) — fetch candles for crypto, stock, and forex
+- [`multi_provider.py`](examples/multi_provider.py) — inspect provider chains and observe fallback behaviour
+
 ## Roadmap
 
 - [x] Tiingo provider (daily/weekly, stocks and ETFs)
 - [x] Finnhub provider (stock candles + forex via Oanda feed)
-- [ ] Session reuse in BinanceProvider
-- [ ] CLI tool: `ohlcv fetch BTCUSDT 1d 100`
+- [x] Session reuse in BinanceProvider
+- [x] CLI tool: `ohlcv fetch BTCUSDT 1d 100`
 - [ ] Response caching (TTL-based)
 - [ ] pip release
 
