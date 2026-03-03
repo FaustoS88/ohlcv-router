@@ -14,7 +14,7 @@ import asyncio
 import click
 
 from ohlcv_hub.registry import fetch as _registry_fetch
-from ohlcv_hub.registry import pick
+from ohlcv_hub.registry import pick, teardown as _teardown
 
 
 @click.group()
@@ -62,32 +62,35 @@ async def _run(
     provider_name: str | None,
     output_csv: bool,
 ) -> None:
-    if provider_name:
-        chain = [p for p in pick(symbol) if p.name == provider_name]
-        if not chain:
-            available = [p.name for p in pick(symbol)]
-            raise click.ClickException(
-                f"Provider '{provider_name}' not in chain for {symbol}. "
-                f"Available: {', '.join(available)}"
-            )
-        candles = await chain[0].fetch(symbol, interval, limit)
-    else:
-        candles = await _registry_fetch(symbol, interval, limit)
+    try:
+        if provider_name:
+            chain = [p for p in pick(symbol) if p.name == provider_name]
+            if not chain:
+                available = [p.name for p in pick(symbol)]
+                raise click.ClickException(
+                    f"Provider '{provider_name}' not in chain for {symbol}. "
+                    f"Available: {', '.join(available)}"
+                )
+            candles = await chain[0].fetch(symbol, interval, limit)
+        else:
+            candles = await _registry_fetch(symbol, interval, limit)
 
-    if not candles:
-        raise click.ClickException(f"No data returned for {symbol} {interval}.")
+        if not candles:
+            raise click.ClickException(f"No data returned for {symbol} {interval}.")
 
-    if output_csv:
-        click.echo("time,open,high,low,close,volume")
-        for c in candles:
-            click.echo(f"{c.time},{c.open},{c.high},{c.low},{c.close},{c.volume}")
-    else:
-        click.echo(
-            f"\n{'time':>12}  {'open':>10}  {'high':>10}  "
-            f"{'low':>10}  {'close':>10}  {'volume':>14}"
-        )
-        for c in candles:
+        if output_csv:
+            click.echo("time,open,high,low,close,volume")
+            for c in candles:
+                click.echo(f"{c.time},{c.open},{c.high},{c.low},{c.close},{c.volume}")
+        else:
             click.echo(
-                f"{c.time:>12}  {c.open:>10.4f}  {c.high:>10.4f}  "
-                f"{c.low:>10.4f}  {c.close:>10.4f}  {c.volume:>14.2f}"
+                f"\n{'time':>12}  {'open':>10}  {'high':>10}  "
+                f"{'low':>10}  {'close':>10}  {'volume':>14}"
             )
+            for c in candles:
+                click.echo(
+                    f"{c.time:>12}  {c.open:>10.4f}  {c.high:>10.4f}  "
+                    f"{c.low:>10.4f}  {c.close:>10.4f}  {c.volume:>14.2f}"
+                )
+    finally:
+        await _teardown()

@@ -138,3 +138,15 @@ async def fetch(
         tried or ["none"],
     )
     return None
+
+
+async def teardown() -> None:
+    """Close any open provider sessions (e.g. aiohttp).
+
+    Call this before the event loop exits to avoid 'Unclosed client session'
+    warnings at process shutdown.
+    """
+    from ohlcv_hub.providers import binance as _bm  # noqa: PLC0415
+
+    if _bm._session is not None and not _bm._session.closed:
+        await _bm._session.close()
