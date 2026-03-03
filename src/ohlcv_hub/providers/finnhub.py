@@ -10,12 +10,15 @@ Install the optional dep before use:
 from __future__ import annotations
 
 import asyncio
+import logging
 import os
 import re
 import time
 
 from ohlcv_hub.models import Candle
 from ohlcv_hub.providers.base import OHLCVProvider
+
+logger = logging.getLogger(__name__)
 
 # Finnhub resolution strings
 _RESOLUTION_MAP: dict[str, str] = {
@@ -131,8 +134,11 @@ class FinnhubProvider(OHLCVProvider):
             data = finnhub.Client(api_key=api_key).stock_candles(
                 symbol, resolution, from_ts, to_ts
             )
+            if data and data.get("s") != "ok":
+                logger.warning("finnhub stock_candles status=%s for %s", data.get("s"), symbol)
             return data if data and data.get("s") == "ok" else None
-        except Exception:
+        except Exception as exc:
+            logger.warning("finnhub stock_candles raised %s: %s", type(exc).__name__, exc)
             return None
 
     @staticmethod
@@ -150,8 +156,11 @@ class FinnhubProvider(OHLCVProvider):
             data = finnhub.Client(api_key=api_key).forex_candles(
                 fx_sym, resolution, from_ts, to_ts
             )
+            if data and data.get("s") != "ok":
+                logger.warning("finnhub forex_candles status=%s for %s", data.get("s"), fx_sym)
             return data if data and data.get("s") == "ok" else None
-        except Exception:
+        except Exception as exc:
+            logger.warning("finnhub forex_candles raised %s: %s", type(exc).__name__, exc)
             return None
 
     @staticmethod

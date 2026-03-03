@@ -89,7 +89,7 @@ ohlcv fetch BTCUSDT 1d 10 --csv
 | Intl stocks | `WM.TO`, `RIO.L` | yfinance → Finnhub                          |
 | Forex       | `EURUSD`         | yfinance → Finnhub                          |
 
-Tiingo requires `TIINGO_API_KEY`. Finnhub requires `FINNHUB_API_KEY`. Both fall back gracefully when the key is absent.
+Tiingo requires `TIINGO_API_KEY`. Finnhub requires `FINNHUB_API_KEY` and a **paid plan** — the free tier does not include historical candles. Both fall back gracefully when the key is absent or the plan lacks access.
 
 ## Examples
 

@@ -23,6 +23,7 @@ dependencies = [
     "aiohttp>=3.9",
     "yfinance>=0.2",
     "click>=8.1",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]

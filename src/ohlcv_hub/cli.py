@@ -12,9 +12,12 @@ from __future__ import annotations
 import asyncio
 
 import click
+from dotenv import load_dotenv
 
 from ohlcv_hub.registry import fetch as _registry_fetch
 from ohlcv_hub.registry import pick, teardown as _teardown
+
+load_dotenv()  # load .env from cwd or any parent directory
 
 
 @click.group()
