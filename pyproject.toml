@@ -22,12 +22,12 @@ classifiers = [
 dependencies = [
     "aiohttp>=3.9",
     "yfinance>=0.2",
+    "click>=8.1",
 ]
 
 [project.optional-dependencies]
 tiingo = ["requests>=2.31"]
 finnhub = ["finnhub-python>=2.4"]
-cli = ["click>=8.1"]
 dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.4", "aioresponses>=0.7"]
 
 [project.scripts]
