@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Lazy imports — providers are only loaded when first used
 _binance: OHLCVProvider | None = None
+_coingecko: OHLCVProvider | None = None
 _yfinance: OHLCVProvider | None = None
 _tiingo: OHLCVProvider | None = None
 _finnhub: OHLCVProvider | None = None
@@ -35,6 +36,14 @@ def _get_binance() -> OHLCVProvider:
         from ohlcv_hub.providers.binance import BinanceProvider  # noqa: PLC0415
         _binance = BinanceProvider()
     return _binance
+
+
+def _get_coingecko() -> OHLCVProvider:
+    global _coingecko
+    if _coingecko is None:
+        from ohlcv_hub.providers.coingecko import CoinGeckoProvider  # noqa: PLC0415
+        _coingecko = CoinGeckoProvider()
+    return _coingecko
 
 
 def _get_yfinance() -> OHLCVProvider:
@@ -75,7 +84,7 @@ def pick(symbol: str) -> list[OHLCVProvider]:
     up = symbol.upper()
 
     if _CRYPTO_RE.match(up):
-        return [_get_binance(), _get_yfinance()]
+        return [_get_binance(), _get_coingecko(), _get_yfinance()]
 
     if _STOCK_RE.match(up):
         # Tiingo covers daily/weekly; Finnhub covers intraday — both tried as fallbacks
@@ -88,7 +97,7 @@ def pick(symbol: str) -> list[OHLCVProvider]:
         return [_get_yfinance(), _get_finnhub()]
 
     # Unknown — try all
-    return [_get_binance(), _get_yfinance(), _get_tiingo(), _get_finnhub()]
+    return [_get_binance(), _get_coingecko(), _get_yfinance(), _get_tiingo(), _get_finnhub()]
 
 
 async def fetch(
