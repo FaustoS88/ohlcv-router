@@ -7,7 +7,7 @@
 Async Python library for fetching OHLCV (candlestick) market data from multiple free providers. Automatically routes symbols to the best available data source and falls back gracefully when a provider fails.
 
 ```
-BTCUSDT  →  Binance  →  CoinGecko  →  yfinance
+BTCUSDT  →  Binance  →  CoinGecko  →  Kraken  →  yfinance
 AAPL     →  yfinance  →  Tiingo (daily/weekly)  →  Finnhub
 WM.TO    →  yfinance  →  Finnhub
 EURUSD   →  yfinance  →  Finnhub
@@ -15,7 +15,7 @@ EURUSD   →  yfinance  →  Finnhub
 
 ## Features
 
-- **Multi-provider** — Binance, CoinGecko, yfinance, Tiingo, Finnhub with automatic fallback
+- **Multi-provider** — Binance, CoinGecko, Kraken, yfinance, Tiingo, Finnhub with automatic fallback
 - **Auto-routing** — asset class detection picks the right provider chain per symbol
 - **Async** — built on `asyncio` / `aiohttp`, no blocking calls
 - **Typed** — full type annotations, `py.typed` marker included
@@ -84,7 +84,7 @@ ohlcv fetch BTCUSDT 1d 10 --csv
 
 | Asset class | Pattern example  | Provider chain                              |
 |-------------|------------------|---------------------------------------------|
-| Crypto      | `BTCUSDT`        | Binance → CoinGecko → yfinance              |
+| Crypto      | `BTCUSDT`        | Binance → CoinGecko → Kraken → yfinance     |
 | US stocks   | `AAPL`, `^GSPC`  | yfinance → Tiingo (daily/weekly) → Finnhub  |
 | Intl stocks | `WM.TO`, `RIO.L` | yfinance → Finnhub                          |
 | Forex       | `EURUSD`         | yfinance → Finnhub                          |
@@ -92,6 +92,8 @@ ohlcv fetch BTCUSDT 1d 10 --csv
 Tiingo requires `TIINGO_API_KEY`. Finnhub requires `FINNHUB_API_KEY` and a **paid plan** — the free tier does not include historical candles. Both fall back gracefully when the key is absent or the plan lacks access.
 
 CoinGecko requires no API key. It supports `4h` and `1d` intervals only (granularity is automatic). Volume is not available from the OHLC endpoint and is always `0`.
+
+Kraken requires no API key. Public REST API for all listed crypto pairs. Supports all standard intervals from `1m` to `1w`. Returns up to 720 bars per request.
 
 ## Examples
 
