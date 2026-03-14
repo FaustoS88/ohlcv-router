@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ohlcv-router"
-version = "0.1.1"
+version = "0.1.2"
 description = "Async Python library for fetching OHLCV market data from multiple free providers"
 readme = "README.md"
 license = { text = "MIT" }

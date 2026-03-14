@@ -12,6 +12,7 @@ from __future__ import annotations
 import logging
 import re
 
+from ohlcv_router import cache
 from ohlcv_router.models import Candle
 from ohlcv_router.providers.base import OHLCVProvider
 
@@ -132,6 +133,12 @@ async def fetch(
         interval: Bar interval — ``1m``, ``5m``, ``15m``, ``1h``, ``4h``, ``1d``, ``1w``.
         limit:    Number of bars to return (most recent, oldest-first).
     """
+    if cache.is_enabled():
+        cached = cache.get(symbol, interval, limit)
+        if cached is not None:
+            logger.debug("cache hit for %s %s (limit=%d)", symbol, interval, limit)
+            return cached
+
     chain = pick(symbol)
     tried: list[str] = []
 
@@ -151,6 +158,8 @@ async def fetch(
                 symbol,
                 interval,
             )
+            if cache.is_enabled():
+                cache.set(symbol, interval, limit, result)
             return result
 
         tried.append(provider.name)

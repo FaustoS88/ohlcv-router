@@ -17,6 +17,7 @@ EURUSD   →  yfinance  →  Finnhub
 
 - **Multi-provider** — Binance, CoinGecko, Kraken, KuCoin, yfinance, Tiingo, Finnhub with automatic fallback
 - **Auto-routing** — asset class detection picks the right provider chain per symbol
+- **TTL cache** — in-memory response cache with interval-aware expiry (30s for `1m`, 4h for `1d`, 24h for `1w`)
 - **Async** — built on `asyncio` / `aiohttp`, no blocking calls
 - **Typed** — full type annotations, `py.typed` marker included
 - **CLI** — `ohlcv fetch BTCUSDT 1d 30` out of the box
@@ -97,6 +98,33 @@ Kraken requires no API key. Public REST API for all listed crypto pairs. Support
 
 KuCoin requires no API key. Public REST API supporting all standard intervals from `1m` to `1w`. Returns up to 1500 bars per request. Uses `BASE-QUOTE` symbol format internally (e.g. `BTC-USDT`).
 
+## Caching
+
+Responses are cached in memory with interval-aware TTLs by default:
+
+| Interval | Cache TTL |
+|----------|-----------|
+| `1m`     | 30 s      |
+| `5m`     | 2 min     |
+| `15m`    | 5 min     |
+| `1h`     | 30 min    |
+| `4h`     | 2 h       |
+| `1d`     | 4 h       |
+| `1w`     | 24 h      |
+
+Disable caching for a process by setting:
+
+```bash
+OHLCV_CACHE_ENABLED=false ohlcv fetch BTCUSDT 1d 10
+```
+
+Or in Python:
+
+```python
+import os
+os.environ["OHLCV_CACHE_ENABLED"] = "false"
+```
+
 ## Examples
 
 See [`examples/`](examples/) for runnable scripts:
@@ -109,11 +137,11 @@ See [`examples/`](examples/) for runnable scripts:
 **Done**
 - Binance, CoinGecko, Kraken, KuCoin, yfinance, Tiingo, Finnhub providers
 - CLI tool: `ohlcv fetch BTCUSDT 1d 100`
+- TTL cache with interval-aware expiry
 - Session reuse, structured logging, full type annotations
 - Published on PyPI: `pip install ohlcv-router`
 
 **Planned**
-- Response caching (TTL-based, in-memory)
 - OKX and Bybit providers
 - Async context manager support
 
