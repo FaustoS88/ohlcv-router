@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 _binance: OHLCVProvider | None = None
 _coingecko: OHLCVProvider | None = None
 _kraken: OHLCVProvider | None = None
+_kucoin: OHLCVProvider | None = None
 _yfinance: OHLCVProvider | None = None
 _tiingo: OHLCVProvider | None = None
 _finnhub: OHLCVProvider | None = None
@@ -53,6 +54,14 @@ def _get_kraken() -> OHLCVProvider:
         from ohlcv_hub.providers.kraken import KrakenProvider  # noqa: PLC0415
         _kraken = KrakenProvider()
     return _kraken
+
+
+def _get_kucoin() -> OHLCVProvider:
+    global _kucoin
+    if _kucoin is None:
+        from ohlcv_hub.providers.kucoin import KuCoinProvider  # noqa: PLC0415
+        _kucoin = KuCoinProvider()
+    return _kucoin
 
 
 def _get_yfinance() -> OHLCVProvider:
@@ -93,7 +102,7 @@ def pick(symbol: str) -> list[OHLCVProvider]:
     up = symbol.upper()
 
     if _CRYPTO_RE.match(up):
-        return [_get_binance(), _get_coingecko(), _get_kraken(), _get_yfinance()]
+        return [_get_binance(), _get_coingecko(), _get_kraken(), _get_kucoin(), _get_yfinance()]
 
     if _STOCK_RE.match(up):
         # Tiingo covers daily/weekly; Finnhub covers intraday — both tried as fallbacks
@@ -106,7 +115,7 @@ def pick(symbol: str) -> list[OHLCVProvider]:
         return [_get_yfinance(), _get_finnhub()]
 
     # Unknown — try all
-    return [_get_binance(), _get_coingecko(), _get_kraken(), _get_yfinance(), _get_tiingo(), _get_finnhub()]
+    return [_get_binance(), _get_coingecko(), _get_kraken(), _get_kucoin(), _get_yfinance(), _get_tiingo(), _get_finnhub()]
 
 
 async def fetch(

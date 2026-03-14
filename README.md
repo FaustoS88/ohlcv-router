@@ -7,7 +7,7 @@
 Async Python library for fetching OHLCV (candlestick) market data from multiple free providers. Automatically routes symbols to the best available data source and falls back gracefully when a provider fails.
 
 ```
-BTCUSDT  →  Binance  →  CoinGecko  →  Kraken  →  yfinance
+BTCUSDT  →  Binance  →  CoinGecko  →  Kraken  →  KuCoin  →  yfinance
 AAPL     →  yfinance  →  Tiingo (daily/weekly)  →  Finnhub
 WM.TO    →  yfinance  →  Finnhub
 EURUSD   →  yfinance  →  Finnhub
@@ -15,7 +15,7 @@ EURUSD   →  yfinance  →  Finnhub
 
 ## Features
 
-- **Multi-provider** — Binance, CoinGecko, Kraken, yfinance, Tiingo, Finnhub with automatic fallback
+- **Multi-provider** — Binance, CoinGecko, Kraken, KuCoin, yfinance, Tiingo, Finnhub with automatic fallback
 - **Auto-routing** — asset class detection picks the right provider chain per symbol
 - **Async** — built on `asyncio` / `aiohttp`, no blocking calls
 - **Typed** — full type annotations, `py.typed` marker included
@@ -84,7 +84,7 @@ ohlcv fetch BTCUSDT 1d 10 --csv
 
 | Asset class | Pattern example  | Provider chain                              |
 |-------------|------------------|---------------------------------------------|
-| Crypto      | `BTCUSDT`        | Binance → CoinGecko → Kraken → yfinance     |
+| Crypto      | `BTCUSDT`        | Binance → CoinGecko → Kraken → KuCoin → yfinance |
 | US stocks   | `AAPL`, `^GSPC`  | yfinance → Tiingo (daily/weekly) → Finnhub  |
 | Intl stocks | `WM.TO`, `RIO.L` | yfinance → Finnhub                          |
 | Forex       | `EURUSD`         | yfinance → Finnhub                          |
@@ -94,6 +94,8 @@ Tiingo requires `TIINGO_API_KEY`. Finnhub requires `FINNHUB_API_KEY` and a **pai
 CoinGecko requires no API key. It supports `4h` and `1d` intervals only (granularity is automatic). Volume is not available from the OHLC endpoint and is always `0`.
 
 Kraken requires no API key. Public REST API for all listed crypto pairs. Supports all standard intervals from `1m` to `1w`. Returns up to 720 bars per request.
+
+KuCoin requires no API key. Public REST API supporting all standard intervals from `1m` to `1w`. Returns up to 1500 bars per request. Uses `BASE-QUOTE` symbol format internally (e.g. `BTC-USDT`).
 
 ## Examples
 
@@ -108,6 +110,7 @@ See [`examples/`](examples/) for runnable scripts:
 - [x] Finnhub provider (stock candles + forex via Oanda feed)
 - [x] Session reuse in BinanceProvider
 - [x] CLI tool: `ohlcv fetch BTCUSDT 1d 100`
+- [x] KuCoin provider (crypto, no key, 1500 bars, all intervals)
 - [ ] Response caching (TTL-based)
 - [ ] pip release
 
