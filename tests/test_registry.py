@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from ohlcv_hub.providers.binance import BinanceProvider
-from ohlcv_hub.providers.yfinance import YFinanceProvider
-from ohlcv_hub.registry import pick
+from ohlcv_router.providers.binance import BinanceProvider
+from ohlcv_router.providers.yfinance import YFinanceProvider
+from ohlcv_router.registry import pick
 
 
 # ---------------------------------------------------------------------------

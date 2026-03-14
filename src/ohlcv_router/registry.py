@@ -12,8 +12,8 @@ from __future__ import annotations
 import logging
 import re
 
-from ohlcv_hub.models import Candle
-from ohlcv_hub.providers.base import OHLCVProvider
+from ohlcv_router.models import Candle
+from ohlcv_router.providers.base import OHLCVProvider
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ _FOREX_RE = re.compile(r"^[A-Z]{6}$")
 def _get_binance() -> OHLCVProvider:
     global _binance
     if _binance is None:
-        from ohlcv_hub.providers.binance import BinanceProvider  # noqa: PLC0415
+        from ohlcv_router.providers.binance import BinanceProvider  # noqa: PLC0415
         _binance = BinanceProvider()
     return _binance
 
@@ -43,7 +43,7 @@ def _get_binance() -> OHLCVProvider:
 def _get_coingecko() -> OHLCVProvider:
     global _coingecko
     if _coingecko is None:
-        from ohlcv_hub.providers.coingecko import CoinGeckoProvider  # noqa: PLC0415
+        from ohlcv_router.providers.coingecko import CoinGeckoProvider  # noqa: PLC0415
         _coingecko = CoinGeckoProvider()
     return _coingecko
 
@@ -51,7 +51,7 @@ def _get_coingecko() -> OHLCVProvider:
 def _get_kraken() -> OHLCVProvider:
     global _kraken
     if _kraken is None:
-        from ohlcv_hub.providers.kraken import KrakenProvider  # noqa: PLC0415
+        from ohlcv_router.providers.kraken import KrakenProvider  # noqa: PLC0415
         _kraken = KrakenProvider()
     return _kraken
 
@@ -59,7 +59,7 @@ def _get_kraken() -> OHLCVProvider:
 def _get_kucoin() -> OHLCVProvider:
     global _kucoin
     if _kucoin is None:
-        from ohlcv_hub.providers.kucoin import KuCoinProvider  # noqa: PLC0415
+        from ohlcv_router.providers.kucoin import KuCoinProvider  # noqa: PLC0415
         _kucoin = KuCoinProvider()
     return _kucoin
 
@@ -67,7 +67,7 @@ def _get_kucoin() -> OHLCVProvider:
 def _get_yfinance() -> OHLCVProvider:
     global _yfinance
     if _yfinance is None:
-        from ohlcv_hub.providers.yfinance import YFinanceProvider  # noqa: PLC0415
+        from ohlcv_router.providers.yfinance import YFinanceProvider  # noqa: PLC0415
         _yfinance = YFinanceProvider()
     return _yfinance
 
@@ -75,7 +75,7 @@ def _get_yfinance() -> OHLCVProvider:
 def _get_tiingo() -> OHLCVProvider:
     global _tiingo
     if _tiingo is None:
-        from ohlcv_hub.providers.tiingo import TiingoProvider  # noqa: PLC0415
+        from ohlcv_router.providers.tiingo import TiingoProvider  # noqa: PLC0415
         _tiingo = TiingoProvider()
     return _tiingo
 
@@ -83,7 +83,7 @@ def _get_tiingo() -> OHLCVProvider:
 def _get_finnhub() -> OHLCVProvider:
     global _finnhub
     if _finnhub is None:
-        from ohlcv_hub.providers.finnhub import FinnhubProvider  # noqa: PLC0415
+        from ohlcv_router.providers.finnhub import FinnhubProvider  # noqa: PLC0415
         _finnhub = FinnhubProvider()
     return _finnhub
 
@@ -173,7 +173,7 @@ async def teardown() -> None:
     Call this before the event loop exits to avoid 'Unclosed client session'
     warnings at process shutdown.
     """
-    from ohlcv_hub.providers import binance as _bm  # noqa: PLC0415
+    from ohlcv_router.providers import binance as _bm  # noqa: PLC0415
 
     if _bm._session is not None and not _bm._session.closed:
         await _bm._session.close()

@@ -14,8 +14,8 @@ import re
 
 import aiohttp
 
-from ohlcv_hub.models import Candle
-from ohlcv_hub.providers.base import OHLCVProvider
+from ohlcv_router.models import Candle
+from ohlcv_router.providers.base import OHLCVProvider
 
 logger = logging.getLogger(__name__)
 

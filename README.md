@@ -41,7 +41,7 @@ pip install -e ".[dev,cli]"
 
 ```python
 import asyncio
-from ohlcv_hub import fetch
+from ohlcv_router import fetch
 
 async def main():
     # Crypto — routes to Binance automatically
@@ -106,13 +106,16 @@ See [`examples/`](examples/) for runnable scripts:
 
 ## Roadmap
 
-- [x] Tiingo provider (daily/weekly, stocks and ETFs)
-- [x] Finnhub provider (stock candles + forex via Oanda feed)
-- [x] Session reuse in BinanceProvider
-- [x] CLI tool: `ohlcv fetch BTCUSDT 1d 100`
-- [x] KuCoin provider (crypto, no key, 1500 bars, all intervals)
-- [ ] Response caching (TTL-based)
-- [ ] pip release
+**Done**
+- Binance, CoinGecko, Kraken, KuCoin, yfinance, Tiingo, Finnhub providers
+- CLI tool: `ohlcv fetch BTCUSDT 1d 100`
+- Session reuse, structured logging, full type annotations
+- Published on PyPI: `pip install ohlcv-router`
+
+**Planned**
+- Response caching (TTL-based, in-memory)
+- OKX and Bybit providers
+- Async context manager support
 
 ## License
 

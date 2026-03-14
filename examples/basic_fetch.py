@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import asyncio
 
-from ohlcv_hub import fetch
+from ohlcv_router import fetch
 
 
 async def main() -> None:

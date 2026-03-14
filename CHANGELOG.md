@@ -8,11 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Added
-- `KuCoinProvider` — public REST API for crypto OHLCV, no API key required; `BASE-QUOTE` symbol normalisation; reverse-chronological response handling; all standard intervals; up to 1500 bars per request
-- Full pytest coverage for `KuCoinProvider` — 30 tests covering normalisation, routing, fetch, and error paths
-- Full pytest coverage for `TiingoProvider` — 30 tests covering `supports()`, `fetch()` (daily/weekly, adj fields, limit, auth header), and `_download()` error paths
-- Full pytest coverage for `FinnhubProvider` — 33 tests covering stock/forex routing, `_to_forex_symbol()`, `_parse()`, and all error cases
+## [0.1.1] — 2026-03-14
+
+### Changed
+- README roadmap: replace GitHub-flavored checkboxes with plain text (renders correctly on PyPI)
+- Roadmap updated to reflect current state — all v0.1.0 items complete, new planned items added
 
 ---
 

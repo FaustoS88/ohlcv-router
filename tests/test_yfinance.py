@@ -8,8 +8,8 @@ import datetime
 import pandas as pd
 import pytest
 
-from ohlcv_hub.models import Candle
-from ohlcv_hub.providers.yfinance import YFinanceProvider, _to_yf_symbol
+from ohlcv_router.models import Candle
+from ohlcv_router.providers.yfinance import YFinanceProvider, _to_yf_symbol
 
 
 def _make_df(n: int = 5) -> pd.DataFrame:

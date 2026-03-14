@@ -7,8 +7,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ohlcv_hub.models import Candle
-from ohlcv_hub.providers.tiingo import TiingoProvider
+from ohlcv_router.models import Candle
+from ohlcv_router.providers.tiingo import TiingoProvider
 
 # ---------------------------------------------------------------------------
 # Helpers
