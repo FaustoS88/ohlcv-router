@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ohlcv-hub"
+name = "ohlcv-router"
 version = "0.1.0"
 description = "Async Python library for fetching OHLCV market data from multiple free providers"
 readme = "README.md"
@@ -35,7 +35,7 @@ dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.4", "aioresponses>=0.7", "b
 ohlcv = "ohlcv_hub.cli:main"
 
 [project.urls]
-Repository = "https://github.com/FaustoS88/ohlcv-hub"
+Repository = "https://github.com/FaustoS88/ohlcv-router"
 
 [tool.setuptools.package-data]
 "ohlcv_hub" = ["py.typed"]

@@ -1,6 +1,6 @@
-# ohlcv-hub
+# ohlcv-router
 
-[![CI](https://github.com/FaustoS88/ohlcv-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/FaustoS88/ohlcv-hub/actions/workflows/ci.yml)
+[![CI](https://github.com/FaustoS88/ohlcv-router/actions/workflows/ci.yml/badge.svg)](https://github.com/FaustoS88/ohlcv-router/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -26,14 +26,14 @@ EURUSD   →  yfinance  →  Finnhub
 ## Installation
 
 ```bash
-pip install ohlcv-hub
+pip install ohlcv-router
 ```
 
 Or from source:
 
 ```bash
-git clone https://github.com/FaustoS88/ohlcv-hub.git
-cd ohlcv-hub
+git clone https://github.com/FaustoS88/ohlcv-router.git
+cd ohlcv-router
 pip install -e ".[dev,cli]"
 ```
 
