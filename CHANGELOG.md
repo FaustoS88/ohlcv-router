@@ -16,11 +16,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [0.1.0] — 2026-03-06
+## [0.1.0] — 2026-03-14
 
 ### Added
+- `KuCoinProvider` — public REST API, no key, `BASE-QUOTE` symbol normalisation, all intervals, 1500 bars
 - `KrakenProvider` — public REST API for crypto OHLCV, no key required; BTC→XBT symbol mapping; all standard intervals
 - `CoinGeckoProvider` — crypto OHLCV with no API key; 4h and 1d granularity via auto-detection
+- GitHub Actions release workflow — publishes to PyPI on `v*` tag push
 
 ### Fixed
 - Logging added to registry fallback chain — silent `None` returns now emit `debug`/`warning` diagnostics
