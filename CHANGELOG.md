@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-03-14
+
+### Added
+- In-memory TTL cache in `ohlcv_router.cache` — interval-aware expiry (30s for `1m` up to 24h for `1w`)
+- Cache integrated into `registry.fetch()` — hit avoids all provider calls, miss populates on success
+- `OHLCV_CACHE_ENABLED=false` env var to disable cache process-wide
+- `cache.clear()` and `cache.size()` for testing and CLI tooling
+- 26 cache tests covering TTL expiry, eviction, env toggle, and registry integration
+- README Caching section with TTL table and usage examples
+
 ## [0.1.1] — 2026-03-14
 
 ### Changed
