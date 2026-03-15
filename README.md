@@ -1,6 +1,8 @@
 # ohlcv-router
 
 [![CI](https://github.com/FaustoS88/ohlcv-router/actions/workflows/ci.yml/badge.svg)](https://github.com/FaustoS88/ohlcv-router/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/ohlcv-router.svg)](https://pypi.org/project/ohlcv-router/)
+[![Downloads](https://img.shields.io/pypi/dm/ohlcv-router.svg)](https://pypi.org/project/ohlcv-router/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
