@@ -5,6 +5,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/ohlcv-router.svg)](https://pypi.org/project/ohlcv-router/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/FaustoS88/ohlcv-router?style=social)](https://github.com/FaustoS88/ohlcv-router)
 
 Async Python library for fetching OHLCV (candlestick) market data from multiple free providers. Automatically routes symbols to the best available data source and falls back gracefully when a provider fails.
 
@@ -134,6 +135,36 @@ See [`examples/`](examples/) for runnable scripts:
 - [`basic_fetch.py`](examples/basic_fetch.py) — fetch candles for crypto, stock, and forex
 - [`multi_provider.py`](examples/multi_provider.py) — inspect provider chains and observe fallback behaviour
 
+## Why ohlcv-router?
+
+| Feature | Direct API calls | ccxt | ohlcv-router |
+|---------|-----------------|------|--------------|
+| Crypto (BTCUSDT, ETHUSDT…) | ✓ one provider at a time | ✓ 100+ exchanges | ✓ |
+| US stocks & ETFs (AAPL, SPY…) | requires separate library | ✗ | ✓ |
+| International stocks (WM.TO…) | requires separate library | ✗ | ✓ |
+| Forex (EURUSD, GBPUSD…) | requires separate library | ✗ | ✓ |
+| Auto-fallback on failure | ✗ | ✗ | ✓ |
+| TTL response cache | ✗ | ✗ | ✓ |
+| No API key for basic use | ✗ | ✗ | ✓ |
+| Single unified `fetch()` call | ✗ | ✓ (crypto only) | ✓ |
+| Async / non-blocking | depends | ✓ | ✓ |
+
+## Performance
+
+Typical response latency per provider (varies by network and rate-limit tier):
+
+| Provider | Typical latency | Key required | Asset classes |
+|----------|----------------|--------------|---------------|
+| Binance  | ~50–150 ms | No | Crypto |
+| KuCoin   | ~100–200 ms | No | Crypto |
+| Kraken   | ~100–250 ms | No | Crypto |
+| CoinGecko | ~200–400 ms | No | Crypto |
+| yfinance | ~300–800 ms | No | Stocks, Forex, Crypto |
+| Tiingo   | ~200–400 ms | Yes (free) | Stocks, ETFs |
+| Finnhub  | ~200–500 ms | Yes (paid) | Stocks, Forex |
+
+Providers are tried in the order shown in the routing table. If the first succeeds, the rest are never called. With caching enabled, subsequent calls for the same symbol return instantly from memory.
+
 ## Roadmap
 
 **Done**
@@ -146,6 +177,14 @@ See [`examples/`](examples/) for runnable scripts:
 **Planned**
 - OKX and Bybit providers
 - Async context manager support
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=FaustoS88/ohlcv-router&type=Date)](https://star-history.com/#FaustoS88/ohlcv-router&Date)
+
+## Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=FaustoS88/ohlcv-router)](https://github.com/FaustoS88/ohlcv-router/graphs/contributors)
 
 ## License
 
